@@ -15,6 +15,8 @@ public:
 	**/
 	void Run(wchar_t* text, CPythonInterpretorCallback* callback);
 
+  void Run();
+
 	/**
 	* Reset Python Interpretor session
 	**/

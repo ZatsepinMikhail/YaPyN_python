@@ -166,7 +166,8 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 		ShowText(L"Reset pressed");
 		return;
 	case ID_COMMANDS_RUN:
-		pythonInterpretor.Run(L"Run!!!", this);
+		//pythonInterpretor.Run(L"Run!!!", this);
+    pythonInterpretor.Run();
 		return;
 	}
 }
