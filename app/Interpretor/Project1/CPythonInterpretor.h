@@ -1,7 +1,7 @@
 #pragma once
 
 /**
-* Интерфейс callback с результатами работы интерпретатора.
+* Interface of CPythonInterpretor callback.
 **/
 class CPythonInterpretorCallback {
 public:
@@ -11,12 +11,12 @@ public:
 class CPythonInterpretor {
 public:
 	/**
-	* Запускает кусок кода на Python
+	* Run piece of code on Python
 	**/
 	void Run(wchar_t* text, CPythonInterpretorCallback* callback);
 
 	/**
-	* Очищает состояние интерпретатора Python
+	* Reset Python Interpretor session
 	**/
 	void Reset();
 

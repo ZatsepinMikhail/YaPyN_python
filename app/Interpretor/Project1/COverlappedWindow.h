@@ -2,10 +2,10 @@
 #include <Windows.h>
 #include "CPythonInterpretor.h"
 
-//для поля ввода
+//ID of input element
 #define ID_EDITCHILD 100
 
-//для поля вывода
+//ID of output element
 #define ID_SHOWCHILD 101
 
 class COverlappedWindow : public CPythonInterpretorCallback {
