@@ -162,11 +162,11 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 	case ID_ACCELERATOR_FAST_QUIT:
 		::PostMessage(handle, WM_QUIT, (WPARAM)0, (LPARAM)0);
 		return;
-	case ID_COMMANDS_NEW:
-		ShowText(L"New pressed");
+	case ID_COMMANDS_RESET:
+		ShowText(L"Reset pressed");
 		return;
 	case ID_COMMANDS_RUN:
-		ShowText(L"Run pressed");
+		pythonInterpretor.Run(L"Run!!!", this);
 		return;
 	}
 }
@@ -186,4 +186,8 @@ void COverlappedWindow::ShowText(wchar_t* text) {
 	if (!::SetWindowText(hwndShow, text)) {
 		//pain
 	}
+}
+
+void COverlappedWindow::OnPythonInterpretResult(wchar_t* result) {
+	ShowText(result);
 }

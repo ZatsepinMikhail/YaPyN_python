@@ -1,4 +1,4 @@
-﻿Build started 25.09.2016 19:45:57.
+﻿Build started 25.09.2016 20:22:07.
      1>Project "C:\Problems\YaPin\YaPyN_python\app\Interpretor\Project1\Project1.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt COverlappedWindow.cpp WinMain.cpp
@@ -13,9 +13,10 @@
          Debug\COverlappedWindow.obj
          Debug\CPythonInterpretor.obj
          Debug\WinMain.obj
-         Project1.vcxproj -> C:\Problems\YaPin\YaPyN_python\app\Interpretor\Debug\Project1.exe
-     1>Done Building Project "C:\Problems\YaPin\YaPyN_python\app\Interpretor\Project1\Project1.vcxproj" (Build target(s)).
+     1>COverlappedWindow.obj : error LNK2019: unresolved external symbol "public: __thiscall CPythonInterpretor::CPythonInterpretor(void)" (??0CPythonInterpretor@@QAE@XZ) referenced in function "public: __thiscall COverlappedWindow::COverlappedWindow(void)" (??0COverlappedWindow@@QAE@XZ)
+     1>C:\Problems\YaPin\YaPyN_python\app\Interpretor\Debug\Project1.exe : fatal error LNK1120: 1 unresolved externals
+     1>Done Building Project "C:\Problems\YaPin\YaPyN_python\app\Interpretor\Project1\Project1.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:01.65
+Time Elapsed 00:00:01.60

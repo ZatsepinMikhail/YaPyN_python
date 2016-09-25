@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "CPythonInterpretor.h"
 
 //для поля ввода
 #define ID_EDITCHILD 100
@@ -7,7 +8,7 @@
 //для поля вывода
 #define ID_SHOWCHILD 101
 
-class COverlappedWindow {
+class COverlappedWindow : public CPythonInterpretorCallback {
 public:
 	COverlappedWindow();
 	~COverlappedWindow();
@@ -22,6 +23,8 @@ public:
 
 	HACCEL haccel;
 	HWND handle;
+
+	void OnPythonInterpretResult(wchar_t* result);
 protected:
 	void OnCreate(HWND handle);
 	void OnSize(LPARAM lParam);
@@ -32,6 +35,7 @@ protected:
 	LRESULT OnCtlColorEdit(WPARAM wParam);
 
 private:
+	CPythonInterpretor pythonInterpretor;
 	HWND hwndEdit; 
 	HWND hwndShow;
 	HINSTANCE hInst;
