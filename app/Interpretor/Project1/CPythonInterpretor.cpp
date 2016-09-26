@@ -7,11 +7,11 @@ void CPythonInterpretor::Run(wchar_t* text, CPythonInterpretorCallback* callback
 	callback->OnPythonInterpretResult(text);
 }
 
-void ErrorExit(PTSTR lpszFunction)
-
-// Format a readable error message, display a message box, 
-// and exit from the application.
-{
+/**
+* Format a readable error message, display a message box, 
+* and exit from the application.
+**/
+void ErrorExit(PTSTR lpszFunction) {
     LPVOID lpMsgBuf;
     LPVOID lpDisplayBuf;
     DWORD dw = GetLastError();
