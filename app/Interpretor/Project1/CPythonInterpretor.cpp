@@ -3,8 +3,11 @@
 #include "Windows.h"
 #include <strsafe.h>
 
-void CPythonInterpretor::Run(wchar_t* text, CPythonInterpretorCallback* callback) {
-	callback->OnPythonInterpretResult(text);
+void CPythonInterpretor::Run(std::shared_ptr<wchar_t> text, 
+	std::shared_ptr<CPythonInterpretorCallback> callback) {
+
+	//smart code must be here
+	callback.get()->OnPythonInterpretResult(text);
 }
 
 /**

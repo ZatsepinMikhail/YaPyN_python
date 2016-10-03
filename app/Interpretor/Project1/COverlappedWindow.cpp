@@ -166,8 +166,10 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 		ShowText(L"Reset pressed");
 		return;
 	case ID_COMMANDS_RUN:
-		//pythonInterpretor.Run(L"Run!!!", this);
-    pythonInterpretor.Run();
+		pythonInterpretor.Run();
+		return;
+	default:
+		//jsut relax;
 		return;
 	}
 }
@@ -189,6 +191,6 @@ void COverlappedWindow::ShowText(wchar_t* text) {
 	}
 }
 
-void COverlappedWindow::OnPythonInterpretResult(wchar_t* result) {
-	ShowText(result);
+void COverlappedWindow::OnPythonInterpretResult(std::shared_ptr<wchar_t> result) {
+	ShowText(result.get());
 }

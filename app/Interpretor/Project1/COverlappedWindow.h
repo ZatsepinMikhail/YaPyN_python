@@ -24,7 +24,7 @@ public:
 	HACCEL haccel;
 	HWND handle;
 
-	void OnPythonInterpretResult(wchar_t* result);
+	void OnPythonInterpretResult(std::shared_ptr<wchar_t> result);
 protected:
 	void OnCreate(HWND handle);
 	void OnSize(LPARAM lParam);
