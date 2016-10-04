@@ -1,6 +1,8 @@
 #pragma once
+
 #include <Windows.h>
-#include "CPythonInterpretor.h"
+
+#include "PythonInterpretor.h"
 
 //ID of input element
 #define ID_EDITCHILD 100

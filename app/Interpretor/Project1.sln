@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1", "Project1\Project1.vcxproj", "{8D3E09F7-8A2C-49D4-BFB0-5BAE31EF68EC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PythonInterpretorDll", "PythonInterpretorDll\PythonInterpretorDll.vcxproj", "{36459D80-F6CC-4DB7-ADF2-314FC6C83F6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{8D3E09F7-8A2C-49D4-BFB0-5BAE31EF68EC}.Debug|Win32.Build.0 = Debug|Win32
 		{8D3E09F7-8A2C-49D4-BFB0-5BAE31EF68EC}.Release|Win32.ActiveCfg = Release|Win32
 		{8D3E09F7-8A2C-49D4-BFB0-5BAE31EF68EC}.Release|Win32.Build.0 = Release|Win32
+		{36459D80-F6CC-4DB7-ADF2-314FC6C83F6E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36459D80-F6CC-4DB7-ADF2-314FC6C83F6E}.Debug|Win32.Build.0 = Debug|Win32
+		{36459D80-F6CC-4DB7-ADF2-314FC6C83F6E}.Release|Win32.ActiveCfg = Release|Win32
+		{36459D80-F6CC-4DB7-ADF2-314FC6C83F6E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
