@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Python.h>
+
 #include <strsafe.h>
 #include <Windows.h>
 

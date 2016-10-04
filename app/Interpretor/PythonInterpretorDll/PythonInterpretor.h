@@ -7,6 +7,7 @@
 #endif
 
 #include <memory>
+#include <string>
 
 /**
 * Interface of CPythonInterpretor callback.
@@ -19,6 +20,8 @@ public:
 
 class PYTHONINTERPRETORDLL_API CPythonInterpretor {
 public:
+	CPythonInterpretor();
+
 	/**
 	* Run piece of code on Python
 	**/
@@ -30,8 +33,6 @@ public:
 	* Reset Python Interpretor session
 	**/
 	void Reset();
-
-	CPythonInterpretor();
 
 private:
 	CPythonInterpretorCallback* callback;

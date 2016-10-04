@@ -27,6 +27,7 @@ public:
 	HWND handle;
 
 	void OnPythonInterpretResult(std::shared_ptr<wchar_t> result);
+
 protected:
 	void OnCreate(HWND handle);
 	void OnSize(LPARAM lParam);
