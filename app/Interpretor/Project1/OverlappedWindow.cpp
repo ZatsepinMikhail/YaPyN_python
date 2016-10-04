@@ -1,4 +1,4 @@
-#include "COverlappedWindow.h"
+#include "OverlappedWindow.h"
 #include <Windows.h>
 #include <iostream>
 #include "resource.h"

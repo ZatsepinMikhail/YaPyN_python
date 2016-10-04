@@ -66,11 +66,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="COverlappedWindow.h" />
+    <ClInclude Include="OverlappedWindow.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="COverlappedWindow.cpp" />
+    <ClCompile Include="OverlappedWindow.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
