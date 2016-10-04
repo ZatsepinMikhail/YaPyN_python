@@ -1,6 +1,7 @@
-#include <Windows.h>
-#include "OverlappedWindow.h"
 #include <iostream>
+#include <Windows.h>
+
+#include "OverlappedWindow.h"
 
 int initialize(COverlappedWindow *cWindow, const HINSTANCE& instance, int cmdShow)
 {

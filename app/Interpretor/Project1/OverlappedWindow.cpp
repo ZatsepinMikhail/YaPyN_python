@@ -1,8 +1,11 @@
 #include "OverlappedWindow.h"
-#include <Windows.h>
+
 #include <iostream>
-#include "resource.h"
 #include <Commctrl.h>
+#include <Windows.h>
+
+#include "resource.h"
+
 
 COverlappedWindow::COverlappedWindow()
 {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <strsafe.h>
+#include <Windows.h>
 
 #include "PythonInterpretor.h"
-#include "Windows.h"
 
 void CPythonInterpretor::Run(std::shared_ptr<wchar_t> text,
 	std::shared_ptr<CPythonInterpretorCallback> callback) {
