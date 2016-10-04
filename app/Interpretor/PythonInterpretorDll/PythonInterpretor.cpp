@@ -2,17 +2,12 @@
 
 #include <Python.h>
 
-#include <strsafe.h>
-#include <Windows.h>
-
 #include "PythonInterpretor.h"
 
-void CPythonInterpretor::Run(std::shared_ptr<wchar_t> text,
-	std::shared_ptr<CPythonInterpretorCallback> callback) {
-
-	//smart code must be here
-	callback.get()->OnPythonInterpretResult(text);
-}
+#include <codecvt>
+#include <locale>
+#include <strsafe.h>
+#include <Windows.h>
 
 /**
 * Format a readable error message, display a message box,
@@ -48,70 +43,78 @@ void ErrorExit(PTSTR lpszFunction) {
 	ExitProcess(1);
 }
 
-void CPythonInterpretor::Run() {
-
-	SECURITY_ATTRIBUTES secAttr;
-	secAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-	secAttr.lpSecurityDescriptor = NULL;
-	secAttr.bInheritHandle = TRUE;
-
-	HANDLE g_hInputFile = NULL;
-	HANDLE g_hOutputFile = NULL;
-
-	g_hInputFile = CreateFile(
-		L"C:\\Users\\Mikhail\\Documents\\Visual Studio 2015\\Projects\\YaPyN_python\\YaPyN_python\\input.txt",
-		GENERIC_READ,
-		0,
-		&secAttr,
-		OPEN_EXISTING,
-		FILE_ATTRIBUTE_NORMAL,
-		NULL
-		);
-
-	g_hOutputFile = CreateFile(
-		L"C:\\Users\\Mikhail\\Documents\\Visual Studio 2015\\Projects\\YaPyN_python\\YaPyN_python\\output.txt",
-		GENERIC_WRITE,
-		0,
-		&secAttr,
-		CREATE_ALWAYS,
-		FILE_ATTRIBUTE_NORMAL,
-		NULL
-		);
-
-	if (!g_hInputFile) {
-		ErrorExit(TEXT("InputFile"));
-	}
-
-	if (!g_hOutputFile) {
-		ErrorExit(TEXT("OutputFile"));
-	}
-
-	STARTUPINFO siStartInfo;
-
-	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
-	siStartInfo.cb = sizeof(STARTUPINFO);
-	siStartInfo.hStdOutput = g_hOutputFile;
-	siStartInfo.hStdInput = g_hInputFile;
-	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
-
-	PROCESS_INFORMATION piProcInfo;
-	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
-
-	if (!CreateProcess(
-		L"C:\\Users\\Mikhail\\AppData\\Local\\Programs\\Python\\Python35-32\\python.exe",
-		0, 0, 0,
-		TRUE,
-		0, 0, 0,
-		&siStartInfo,
-		&piProcInfo
-		)) {
-		ErrorExit(TEXT("CreateProcess"));
-	}
-}
-
-void CPythonInterpretor::Reset() {
-}
-
 CPythonInterpretor::CPythonInterpretor() {
-	callback = nullptr;
+	Py_Initialize();
+}
+
+CPythonInterpretor::~CPythonInterpretor() {
+	Py_Finalize();
+}
+
+void CPythonInterpretor::Run(
+	const std::wstring& text,
+	std::wstring& result) const {
+	std::wstring tempFilename;
+	CreateTempFilename(tempFilename);
+	SetPythonStdoutToTempfile(tempFilename);
+
+	std::string text_string;
+	WstringToString(text, text_string);
+	PyRun_SimpleString(text_string.c_str());
+
+	FlushPythonOutput();
+
+	HANDLE hFile = CreateFile(
+		tempFilename.c_str(), 
+		GENERIC_READ,         
+		0,                     
+		NULL,                  
+		OPEN_EXISTING,        
+		FILE_ATTRIBUTE_NORMAL, 
+		NULL);            
+
+	const int BUFFER_SIZE = 1000;
+	wchar_t buffer[BUFFER_SIZE + 1];
+	DWORD read_size;
+	ReadFile(hFile, buffer, BUFFER_SIZE, &read_size, NULL);
+	buffer[read_size] = 0;
+	result = std::wstring(buffer);
+}
+
+void CPythonInterpretor::Reset() const {
+	Py_Finalize();
+	Py_Initialize();
+}
+
+void CPythonInterpretor::CreateTempFilename(std::wstring& result) const {
+	WCHAR buffer[MAX_PATH];
+	::GetTempPath(MAX_PATH, buffer);
+	std::wstring tempPath(buffer);
+	::GetTempFileName(
+		tempPath.c_str(),
+		L"OUT",
+		0,
+		buffer);
+	result = std::wstring(buffer);
+}
+
+void CPythonInterpretor::SetPythonStdoutToTempfile(
+	const std::wstring& tempFilename) const {
+	std::wstring command = L"import os\n";
+	command += L"sys.stdout = open('";
+	command += tempFilename;
+	command += L"', 'w')\n";
+	std::string commandString;
+	WstringToString(command, commandString);
+	PyRun_SimpleString(commandString.c_str());
+}
+
+void CPythonInterpretor::FlushPythonOutput() const {
+	PyRun_SimpleString("sys.stdout.flush()");
+}
+
+void CPythonInterpretor::WstringToString(const std::wstring& from, std::string& to) const {
+	using convert_type = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_type, wchar_t> converter;
+	to = converter.to_bytes(from);
 }

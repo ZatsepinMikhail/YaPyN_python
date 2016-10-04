@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifdef PYTHONINTERPRETORDLL_EXPORTS
 #define PYTHONINTERPRETORDLL_API __declspec(dllexport) 
@@ -9,31 +9,28 @@
 #include <memory>
 #include <string>
 
-/**
-* Interface of CPythonInterpretor callback.
-**/
-class PYTHONINTERPRETORDLL_API CPythonInterpretorCallback {
-public:
-	virtual void OnPythonInterpretResult(
-		std::shared_ptr<wchar_t> result) = 0;
-};
-
 class PYTHONINTERPRETORDLL_API CPythonInterpretor {
 public:
 	CPythonInterpretor();
+	virtual ~CPythonInterpretor();
 
 	/**
 	* Run piece of code on Python
 	**/
-	void Run(std::shared_ptr<wchar_t> text, std::shared_ptr<CPythonInterpretorCallback> callback);
-
-	void Run();
+	void Run(
+		const std::wstring& text,
+		std::wstring& result) const;
 
 	/**
-	* Reset Python Interpretor session
+	* Reset interpreter state
 	**/
-	void Reset();
+	void Reset() const;
 
 private:
-	CPythonInterpretorCallback* callback;
+	void CreateTempFilename(std::wstring& result) const;
+
+	void SetPythonStdoutToTempfile(const std::wstring& tempFilename) const;
+	void FlushPythonOutput() const;
+
+	void WstringToString(const std::wstring& from, std::string& to) const;
 };
