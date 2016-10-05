@@ -21,7 +21,6 @@ public:
 
 	void Show(int cmdShow);
 
-	void ShowText(wchar_t* text);
 
 	HACCEL haccel;
 	HWND handle;
@@ -43,4 +42,7 @@ private:
 	static LRESULT __stdcall WindowProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
 
 	HANDLE iconHandle;
+
+	std::wstring GetTextFromInput() const;
+	void ShowText(const std::wstring& text) const;
 };

@@ -1,5 +1,6 @@
 #include "OverlappedWindow.h"
 
+#include <vector>
 #include <iostream>
 #include <Commctrl.h>
 #include <Windows.h>
@@ -169,9 +170,10 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 		ShowText(L"Reset pressed");
 		return;
 	case ID_COMMANDS_RUN: {
-		std::wstring command;
+		std::wstring command = GetTextFromInput();
 		std::wstring result;
 		pythonInterpretor.Run(command, result);
+		ShowText(result);
 		return;
 	}
 	default:
@@ -191,8 +193,18 @@ void COverlappedWindow::Show(int cmdShow)
 	::ShowWindow(handle, cmdShow);
 }
 
-void COverlappedWindow::ShowText(wchar_t* text) {
-	if (!::SetWindowText(hwndShow, text)) {
+void COverlappedWindow::ShowText(const std::wstring& text) const {
+	if (!::SetWindowText(hwndShow, text.c_str())) {
 		//pain
 	}
+}
+
+std::wstring COverlappedWindow::GetTextFromInput() const {
+	int textLength = ::GetWindowTextLength(hwndEdit) + 1;
+	std::vector<wchar_t> buffer(textLength);
+	::GetWindowText(hwndEdit, &buffer[0], textLength);
+	
+	std::wstring text = &buffer[0];
+
+	return text;
 }
