@@ -7,24 +7,44 @@
 
 #include "PythonCommands.h"
 
+CPythonTaskQueue::CPythonTaskQueue(std::unique_ptr<PyObject> newCatcher) {
+	catcher = std::move(newCatcher);
+
+	queueId = 0;
+}
+
+CPythonTaskQueue::~CPythonTaskQueue() {
+
+}
+
 void CPythonTaskQueue::AddNewTask(
 	const std::string& text,
 	std::shared_ptr<IReturnResultCallback>& callback) {
+
 	std::lock_guard<std::mutex> lock(queueMutex);
-	queue.emplace(text, callback);
+	queue.emplace(text, callback, queueId);
 	if (queue.size() == 1) {
 		std::async(&CPythonTaskQueue::Run, this, queue.front());
 	}
 }
 
-void CPythonTaskQueue::ClearQueue() {
+void CPythonTaskQueue::Reset(std::unique_ptr<PyObject> newCatcher) {
 	std::lock_guard<std::mutex> lock(queueMutex);
 	
+	catcher = std::move(catcher);
+
+	++queueId;
+
 	std::queue<CPythonTask> empty;
 	queue.swap(empty);
 }
 
 void CPythonTaskQueue::Run(const CPythonTask& task) {
+	if (task.queueId != this->queueId) {
+		//not relevant task
+		return;
+	}
+
 	// actual run starts here
 	PyRun_SimpleString(task.text.c_str());
 
@@ -44,8 +64,4 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 
 void CPythonTaskQueue::FlushPythonOutput() const {
 	PyRun_SimpleString(CATCHER_FLUSH_OUTPUT.c_str());
-}
-
-void CPythonTaskQueue::SetCatcher(std::unique_ptr<PyObject> catcher) {
-	this->catcher = std::move(catcher);
 }
