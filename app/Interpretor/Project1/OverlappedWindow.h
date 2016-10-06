@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-#include "PythonInterpretor.h"
+#include "PythonInterpreter.h"
 
 //ID of input element
 #define ID_EDITCHILD 100

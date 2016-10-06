@@ -36,7 +36,7 @@ public:
 		std::shared_ptr<IReturnResultCallback>& callback);
 
 	//Reset queue
-	void Reset(std::unique_ptr<PyObject> newCatcher);
+	void Reset(std::unique_ptr<PyObject>& newCatcher);
 private:
 	std::queue<CPythonTask> queue;
 	std::mutex queueMutex;
@@ -49,4 +49,7 @@ private:
 	void Run(const CPythonTask& task);
 
 	void FlushPythonOutput() const;
+
+	const std::string GET_OUTPUT_ERROR_MESSAGE = "Output error";
+	std::string GetOutputFromPyObject(std::unique_ptr<PyObject>& output) const;
 };

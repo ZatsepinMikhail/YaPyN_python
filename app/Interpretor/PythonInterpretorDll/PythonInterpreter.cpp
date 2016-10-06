@@ -2,7 +2,7 @@
 
 #include <Python.h> // should be the first include
 
-#include "PythonInterpretor.h"
+#include "PythonInterpreter.h"
 
 #include <codecvt>
 #include <locale>
@@ -30,7 +30,10 @@ void CPythonInterpretor::InitializePython() {
 
 	std::unique_ptr<PyObject> catcher(
 		PyObject_GetAttrString(mainModule.get(), PYTHON_CATCHER.c_str()));
-	std::unique_ptr<PyObject> output(PyObject_GetAttrString(catcher.get(), PYTHON_CATCHER_DATA.c_str()));
+
+	//pass catcher to queue
+
+	Py_XDECREF(mainModule.get());
 
 	state = INITIALIZED;
 }
