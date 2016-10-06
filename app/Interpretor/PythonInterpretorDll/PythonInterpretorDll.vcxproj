@@ -81,9 +81,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="PythonInterpretor.h" />
+    <ClInclude Include="PythonTaskQueue.h" />
+    <ClInclude Include="ReturnResultCallback.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PythonInterpretor.cpp" />
+    <ClCompile Include="PythonTaskQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

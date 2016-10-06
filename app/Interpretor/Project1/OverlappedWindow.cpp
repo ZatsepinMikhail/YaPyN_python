@@ -172,7 +172,7 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 	case ID_COMMANDS_RUN: {
 		std::wstring command = GetTextFromInput();
 		std::wstring result;
-		pythonInterpretor.Run(command, result);
+		
 		ShowText(result);
 		return;
 	}

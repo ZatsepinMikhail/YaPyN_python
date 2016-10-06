@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Python.h>
+#include <Python.h> // should be the first include
 
 #include "PythonInterpretor.h"
 
@@ -9,39 +9,7 @@
 #include <strsafe.h>
 #include <Windows.h>
 
-/**
-* Format a readable error message, display a message box,
-* and exit from the application.
-**/
-void ErrorExit(PTSTR lpszFunction) {
-	LPVOID lpMsgBuf;
-	LPVOID lpDisplayBuf;
-	DWORD dw = GetLastError();
-
-	FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER |
-		FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL,
-		dw,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPTSTR)&lpMsgBuf,
-		0, NULL
-		);
-
-	lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
-		(lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)lpszFunction) + 40) * sizeof(TCHAR));
-
-	StringCchPrintf((LPTSTR)lpDisplayBuf,
-		LocalSize(lpDisplayBuf) / sizeof(TCHAR),
-		TEXT("%s failed with error %d: %s"),
-		lpszFunction, dw, lpMsgBuf);
-	MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
-
-	LocalFree(lpMsgBuf);
-	LocalFree(lpDisplayBuf);
-	ExitProcess(1);
-}
+#include "ReturnResultCallback.h"
 
 CPythonInterpretor::CPythonInterpretor() {
 	Py_Initialize();
@@ -53,7 +21,7 @@ CPythonInterpretor::~CPythonInterpretor() {
 
 void CPythonInterpretor::Run(
 	const std::wstring& text,
-	std::wstring& result) const {
+	std::shared_ptr<IReturnResultCallback> callback) const {
 	std::wstring tempFilename;
 	CreateTempFilename(tempFilename);
 	SetPythonStdoutToTempfile(tempFilename);
@@ -78,7 +46,9 @@ void CPythonInterpretor::Run(
 	DWORD read_size;
 	ReadFile(hFile, buffer, BUFFER_SIZE, &read_size, NULL);
 	buffer[read_size] = 0;
-	result = std::wstring(buffer);
+	std::string result;
+	WstringToString(std::wstring(buffer), result);
+	callback->ReturnResult(result);
 }
 
 void CPythonInterpretor::Reset() const {
@@ -103,7 +73,7 @@ void CPythonInterpretor::SetPythonStdoutToTempfile(
 	std::wstring command = L"import os\n";
 	command += L"sys.stdout = open('";
 	command += tempFilename;
-	command += L"', 'w')\n";
+	command += L"', 'w+')\n";
 	std::string commandString;
 	WstringToString(command, commandString);
 	PyRun_SimpleString(commandString.c_str());

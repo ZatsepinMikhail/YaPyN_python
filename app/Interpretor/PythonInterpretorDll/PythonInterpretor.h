@@ -9,6 +9,8 @@
 #include <memory>
 #include <string>
 
+#include "ReturnResultCallback.h"
+
 class PYTHONINTERPRETORDLL_API CPythonInterpretor {
 public:
 	CPythonInterpretor();
@@ -19,7 +21,7 @@ public:
 	**/
 	void Run(
 		const std::wstring& text,
-		std::wstring& result) const;
+		std::shared_ptr<IReturnResultCallback> callback) const;
 
 	/**
 	* Reset interpreter state
