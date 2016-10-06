@@ -31,12 +31,6 @@ public:
 	void Reset();
 
 private:
-	enum State {
-		IDLE, INITIALIZED
-	} state = IDLE;
-
-	void CheckState(State needState) const throw(std::logic_error);
-
 	void InitializePython();
 	void FinalizePython();
 

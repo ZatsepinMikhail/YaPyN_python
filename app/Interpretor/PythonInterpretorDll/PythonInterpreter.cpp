@@ -12,18 +12,7 @@
 
 #include "ReturnResultCallback.h"
 
-
-//TODO: добавить вывод needState и current
-void CPythonInterpretor::CheckState(State needState) const throw(std::logic_error) {
-	if (needState != state) {
-		throw std::logic_error("Illegal state exception");
-	}
-}
-
-
 void CPythonInterpretor::InitializePython() {
-	CheckState(IDLE);
-
 	Py_Initialize();
 	std::unique_ptr<PyObject> mainModule(PyImport_AddModule(PYTHON_MAIN.c_str()));
 	PyRun_SimpleString(CATCHER_CLASS_CODE.c_str());
@@ -34,16 +23,10 @@ void CPythonInterpretor::InitializePython() {
 	//pass catcher to queue
 
 	Py_XDECREF(mainModule.get());
-
-	state = INITIALIZED;
 }
 
 void CPythonInterpretor::FinalizePython() {
-	CheckState(INITIALIZED);
-
 	Py_Finalize();
-
-	state = IDLE;
 }
 
 void CPythonInterpretor::Reset() {
