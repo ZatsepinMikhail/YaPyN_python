@@ -8,8 +8,10 @@
 
 #include <memory>
 #include <string>
+#include <exception>
 
 #include "ReturnResultCallback.h"
+#include "PythonCommands.h"
 
 class PYTHONINTERPRETORDLL_API CPythonInterpretor {
 public:
@@ -26,13 +28,17 @@ public:
 	/**
 	* Reset interpreter state
 	**/
-	void Reset() const;
+	void Reset();
 
 private:
-	void CreateTempFilename(std::wstring& result) const;
+	enum State {
+		IDLE, INITIALIZED
+	} state = IDLE;
 
-	void SetPythonStdoutToTempfile(const std::wstring& tempFilename) const;
-	void FlushPythonOutput() const;
+	void CheckState(State needState) const throw(std::logic_error);
+
+	void InitializePython();
+	void FinalizePython();
 
 	void WstringToString(const std::wstring& from, std::string& to) const;
 };

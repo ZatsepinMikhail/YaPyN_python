@@ -8,79 +8,59 @@
 #include <locale>
 #include <strsafe.h>
 #include <Windows.h>
+#include <memory>
 
 #include "ReturnResultCallback.h"
 
-CPythonInterpretor::CPythonInterpretor() {
+
+//TODO: добавить вывод needState и current
+void CPythonInterpretor::CheckState(State needState) const throw(std::logic_error) {
+	if (needState != state) {
+		throw std::logic_error("Illegal state exception");
+	}
+}
+
+
+void CPythonInterpretor::InitializePython() {
+	CheckState(IDLE);
+
 	Py_Initialize();
+	std::unique_ptr<PyObject> mainModule(PyImport_AddModule(PYTHON_MAIN.c_str()));
+	PyRun_SimpleString(CATCHER_CLASS_CODE.c_str());
+
+	std::unique_ptr<PyObject> catcher(
+		PyObject_GetAttrString(mainModule.get(), PYTHON_CATCHER.c_str()));
+	std::unique_ptr<PyObject> output(PyObject_GetAttrString(catcher.get(), PYTHON_CATCHER_DATA.c_str()));
+
+	state = INITIALIZED;
+}
+
+void CPythonInterpretor::FinalizePython() {
+	CheckState(INITIALIZED);
+
+	Py_Finalize();
+
+	state = IDLE;
+}
+
+void CPythonInterpretor::Reset() {
+	FinalizePython();
+	InitializePython();
+}
+
+CPythonInterpretor::CPythonInterpretor() {
+	InitializePython();
 }
 
 CPythonInterpretor::~CPythonInterpretor() {
-	Py_Finalize();
+	FinalizePython();
 }
 
 void CPythonInterpretor::Run(
 	const std::wstring& text,
 	std::shared_ptr<IReturnResultCallback> callback) const {
-	std::wstring tempFilename;
-	CreateTempFilename(tempFilename);
-	SetPythonStdoutToTempfile(tempFilename);
 
-	std::string text_string;
-	WstringToString(text, text_string);
-	PyRun_SimpleString(text_string.c_str());
 
-	FlushPythonOutput();
-
-	HANDLE hFile = CreateFile(
-		tempFilename.c_str(), 
-		GENERIC_READ,         
-		0,                     
-		NULL,                  
-		OPEN_EXISTING,        
-		FILE_ATTRIBUTE_NORMAL, 
-		NULL);            
-
-	const int BUFFER_SIZE = 1000;
-	wchar_t buffer[BUFFER_SIZE + 1];
-	DWORD read_size;
-	ReadFile(hFile, buffer, BUFFER_SIZE, &read_size, NULL);
-	buffer[read_size] = 0;
-	std::string result;
-	WstringToString(std::wstring(buffer), result);
-	callback->ReturnResult(result);
-}
-
-void CPythonInterpretor::Reset() const {
-	Py_Finalize();
-	Py_Initialize();
-}
-
-void CPythonInterpretor::CreateTempFilename(std::wstring& result) const {
-	WCHAR buffer[MAX_PATH];
-	::GetTempPath(MAX_PATH, buffer);
-	std::wstring tempPath(buffer);
-	::GetTempFileName(
-		tempPath.c_str(),
-		L"OUT",
-		0,
-		buffer);
-	result = std::wstring(buffer);
-}
-
-void CPythonInterpretor::SetPythonStdoutToTempfile(
-	const std::wstring& tempFilename) const {
-	std::wstring command = L"import os\n";
-	command += L"sys.stdout = open('";
-	command += tempFilename;
-	command += L"', 'w+')\n";
-	std::string commandString;
-	WstringToString(command, commandString);
-	PyRun_SimpleString(commandString.c_str());
-}
-
-void CPythonInterpretor::FlushPythonOutput() const {
-	PyRun_SimpleString("sys.stdout.flush()");
 }
 
 void CPythonInterpretor::WstringToString(const std::wstring& from, std::string& to) const {
