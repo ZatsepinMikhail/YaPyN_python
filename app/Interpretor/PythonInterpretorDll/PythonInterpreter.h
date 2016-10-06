@@ -12,6 +12,7 @@
 
 #include "ReturnResultCallback.h"
 #include "PythonCommands.h"
+#include "PythonTaskQueue.h"
 
 class PYTHONINTERPRETORDLL_API CPythonInterpretor {
 public:
@@ -31,6 +32,8 @@ public:
 	void Reset();
 
 private:
+	CPythonTaskQueue queue;
+
 	void InitializePython();
 	void FinalizePython();
 

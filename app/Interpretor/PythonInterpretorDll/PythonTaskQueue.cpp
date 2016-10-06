@@ -1,3 +1,7 @@
+#pragma once
+
+#include "Python.h"
+
 #include "PythonTaskQueue.h"
 
 #include <future>
@@ -7,9 +11,7 @@
 
 #include "PythonCommands.h"
 
-CPythonTaskQueue::CPythonTaskQueue(std::unique_ptr<PyObject> newCatcher) {
-	catcher = std::move(newCatcher);
-
+CPythonTaskQueue::CPythonTaskQueue() {
 	queueId = 0;
 }
 

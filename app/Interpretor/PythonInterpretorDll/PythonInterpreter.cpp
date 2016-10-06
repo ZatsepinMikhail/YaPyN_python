@@ -20,7 +20,7 @@ void CPythonInterpretor::InitializePython() {
 	std::unique_ptr<PyObject> catcher(
 		PyObject_GetAttrString(mainModule.get(), PYTHON_CATCHER.c_str()));
 
-	//pass catcher to queue
+	queue.Reset(catcher);
 
 	Py_XDECREF(mainModule.get());
 }

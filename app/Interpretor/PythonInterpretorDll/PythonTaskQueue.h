@@ -24,11 +24,10 @@ struct CPythonTask {
 	int queueId;
 };
 
-class CPythonTaskQueue
-{
+class CPythonTaskQueue {
 public:
-	CPythonTaskQueue(std::unique_ptr<PyObject> newCatcher) { }
-	~CPythonTaskQueue() { }
+	CPythonTaskQueue();
+	~CPythonTaskQueue();
 
 	// Create new task and run it if nothing is running now
 	void AddNewTask(
