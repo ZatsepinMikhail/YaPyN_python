@@ -8,6 +8,6 @@ public:
 	IReturnResultCallback();
 	virtual ~IReturnResultCallback();
 
-	virtual void ReturnResult(std::string) = 0;
+	virtual void ReturnResult(const std::string&) = 0;
 };
 
