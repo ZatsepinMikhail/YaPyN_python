@@ -41,6 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files (x86)\Python36-32\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Python36-32\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -80,12 +82,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="PythonInterpretor.h" />
+    <ClInclude Include="PythonCommands.h" />
+    <ClInclude Include="PythonInterpreter.h" />
     <ClInclude Include="PythonTaskQueue.h" />
     <ClInclude Include="ReturnResultCallback.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PythonInterpretor.cpp" />
+    <ClCompile Include="PythonInterpreter.cpp" />
     <ClCompile Include="PythonTaskQueue.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
