@@ -1,11 +1,14 @@
 #include "OverlappedWindow.h"
 
+#include <codecvt>
+#include <locale>
 #include <vector>
 #include <iostream>
 #include <Commctrl.h>
 #include <Windows.h>
 
 #include "resource.h"
+#include "SimplePythonCallback.h"
 
 
 COverlappedWindow::COverlappedWindow()
@@ -168,12 +171,15 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 		return;
 	case ID_COMMANDS_RESET:
 		ShowText(L"Reset pressed");
+		pythonInterpretor.Reset();
 		return;
 	case ID_COMMANDS_RUN: {
 		std::wstring command = GetTextFromInput();
-		std::wstring result;
-		
-		ShowText(result);
+		using convert_type = std::codecvt_utf8<wchar_t>;
+		std::wstring_convert<convert_type, wchar_t> converter;
+		std::string stringCommand = converter.to_bytes(command);
+
+		pythonInterpretor.Run(stringCommand, std::shared_ptr<IReturnResultCallback>(&SimplePythonCallback(hwndShow)));
 		return;
 	}
 	default:
