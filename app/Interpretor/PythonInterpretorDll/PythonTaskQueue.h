@@ -43,7 +43,7 @@ private:
 	//Helps to get output from python
 	PyObject* catcher;
 	//Helps to manage tasks
-	int queueId;
+	volatile int queueId;
 
 	// Run task and start next one if it's available
 	void Run(const CPythonTask& task);
