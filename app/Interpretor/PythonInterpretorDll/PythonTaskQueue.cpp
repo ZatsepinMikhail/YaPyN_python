@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Python.h"
+#include "Python.h" // should be the first include
 
 #include "PythonTaskQueue.h"
 

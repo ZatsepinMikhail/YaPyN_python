@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Python.h"
+#include "Python.h" // should be the first include
 
+#include <exception>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <queue>
-#include <exception>
 
 #include "ReturnResultCallback.h"
 

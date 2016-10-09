@@ -6,9 +6,9 @@
 
 #include <codecvt>
 #include <locale>
+#include <memory>
 #include <strsafe.h>
 #include <Windows.h>
-#include <memory>
 
 #include "ReturnResultCallback.h"
 
