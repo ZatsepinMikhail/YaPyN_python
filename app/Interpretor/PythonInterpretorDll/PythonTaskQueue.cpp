@@ -51,13 +51,21 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 		PyObject_GetAttrString(catcher, PYTHON_CATCHER_DATA.c_str());
 
 	std::string stringOutput = GetOutputFromPyObject(output);
-	task.callback->ReturnResult(stringOutput);
 
 	PyGILState_Release(gstate);
 
+	if (task.queueId != this->queueId) {
+		//not relevant task
+		return;
+	}
+
+	task.callback->ReturnResult(stringOutput);
+
 	std::lock_guard<std::mutex> lock(queueMutex);
-	queue.pop();
-	if (!queue.empty()) {
+	if (queue.empty()) {
+		return;
+	} else {
+		queue.pop();
 		std::async(&CPythonTaskQueue::Run, this, queue.front());
 	}
 }
