@@ -11,10 +11,6 @@
 
 #include "PythonCommands.h"
 
-CPythonTaskQueue::CPythonTaskQueue() {
-	queueId = 0;
-}
-
 CPythonTaskQueue::~CPythonTaskQueue() {
 	Py_XDECREF(catcher.get());
 }

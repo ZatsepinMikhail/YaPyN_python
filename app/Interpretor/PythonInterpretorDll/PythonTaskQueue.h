@@ -26,7 +26,8 @@ struct CPythonTask {
 
 class CPythonTaskQueue {
 public:
-	CPythonTaskQueue();
+	CPythonTaskQueue()
+		: queueId(0) { }
 	~CPythonTaskQueue();
 
 	// Create new task and run it if nothing is running now
