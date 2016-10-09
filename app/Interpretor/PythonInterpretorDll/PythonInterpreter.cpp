@@ -43,14 +43,7 @@ CPythonInterpretor::~CPythonInterpretor() {
 }
 
 void CPythonInterpretor::Run(
-	const std::wstring& text,
+	const std::string& text,
 	std::shared_ptr<IReturnResultCallback> callback) const {
-
-
-}
-
-void CPythonInterpretor::WstringToString(const std::wstring& from, std::string& to) const {
-	using convert_type = std::codecvt_utf8<wchar_t>;
-	std::wstring_convert<convert_type, wchar_t> converter;
-	to = converter.to_bytes(from);
+	// TODO: implement it
 }

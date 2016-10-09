@@ -23,7 +23,7 @@ public:
 	* Run piece of code on Python
 	**/
 	void Run(
-		const std::wstring& text,
+		const std::string& text,
 		std::shared_ptr<IReturnResultCallback> callback) const;
 
 	/**
@@ -36,6 +36,4 @@ private:
 
 	void InitializePython();
 	void FinalizePython();
-
-	void WstringToString(const std::wstring& from, std::string& to) const;
 };
