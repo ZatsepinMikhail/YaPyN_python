@@ -12,7 +12,6 @@
 #include "PythonCommands.h"
 
 CPythonTaskQueue::~CPythonTaskQueue() {
-	Py_XDECREF(catcher.get());
 }
 
 void CPythonTaskQueue::AddNewTask(
@@ -26,11 +25,10 @@ void CPythonTaskQueue::AddNewTask(
 	}
 }
 
-void CPythonTaskQueue::Reset(std::unique_ptr<PyObject>& newCatcher) {
+void CPythonTaskQueue::Reset(PyObject* newCatcher) {
 	std::lock_guard<std::mutex> lock(queueMutex);
 	
-	Py_XDECREF(catcher.get());
-	catcher = std::move(newCatcher);
+	catcher = newCatcher;
 
 	++queueId;
 
@@ -46,13 +44,11 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 
 	PyRun_SimpleString(task.text.c_str());
 
-	std::unique_ptr<PyObject> output(
-		PyObject_GetAttrString(catcher.get(), PYTHON_CATCHER_DATA.c_str()));
+	PyObject* output =
+		PyObject_GetAttrString(catcher, PYTHON_CATCHER_DATA.c_str());
 
 	std::string stringOutput = GetOutputFromPyObject(output);
 	task.callback->ReturnResult(stringOutput);
-
-	Py_XDECREF(output.get());
 
 	std::lock_guard<std::mutex> lock(queueMutex);
 	queue.pop();
@@ -65,13 +61,12 @@ void CPythonTaskQueue::FlushPythonOutput() const {
 	PyRun_SimpleString(CATCHER_FLUSH_OUTPUT.c_str());
 }
 
-std::string CPythonTaskQueue::GetOutputFromPyObject(std::unique_ptr<PyObject>& output) const {
-	if (PyUnicode_Check(output.get())) {
-		PyObject * bytes = PyUnicode_AsEncodedString(output.get(), "ASCII", "strict"); // Owned reference
+std::string CPythonTaskQueue::GetOutputFromPyObject(PyObject* output) const {
+	if (PyUnicode_Check(output)) {
+		PyObject* bytes = PyUnicode_AsEncodedString(output, "ASCII", "strict"); // Owned reference
 		if (bytes != NULL) {
 			std::string result = PyBytes_AS_STRING(bytes); // Borrowed pointer
 			result = strdup(result.c_str());
-			Py_DECREF(bytes);
 
 			return result;
 		} else {

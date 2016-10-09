@@ -9,4 +9,3 @@ public:
 
 	virtual void ReturnResult(const std::string&) = 0;
 };
-

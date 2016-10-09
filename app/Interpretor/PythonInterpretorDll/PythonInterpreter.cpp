@@ -14,15 +14,13 @@
 
 void CPythonInterpretor::InitializePython() {
 	Py_Initialize();
-	std::unique_ptr<PyObject> mainModule(PyImport_AddModule(PYTHON_MAIN.c_str()));
+	PyObject* mainModule = PyImport_AddModule(PYTHON_MAIN.c_str());
 	PyRun_SimpleString(CATCHER_CLASS_CODE.c_str());
 
-	std::unique_ptr<PyObject> catcher(
-		PyObject_GetAttrString(mainModule.get(), PYTHON_CATCHER.c_str()));
+	PyObject* catcher =
+		PyObject_GetAttrString(mainModule, PYTHON_CATCHER.c_str());
 
 	queue.Reset(catcher);
-
-	Py_XDECREF(mainModule.get());
 }
 
 void CPythonInterpretor::FinalizePython() {
@@ -44,6 +42,7 @@ CPythonInterpretor::~CPythonInterpretor() {
 
 void CPythonInterpretor::Run(
 	const std::string& text,
-	std::shared_ptr<IReturnResultCallback> callback) const {
-	// TODO: implement it
+	std::shared_ptr<IReturnResultCallback> callback) {
+	
+	queue.AddNewTask(text, callback);
 }
