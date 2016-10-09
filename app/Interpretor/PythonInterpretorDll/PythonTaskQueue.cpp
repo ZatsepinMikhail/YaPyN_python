@@ -45,6 +45,8 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 	PyGILState_STATE gstate;
 	gstate = PyGILState_Ensure();
 
+	FlushPythonOutput();
+
 	PyRun_SimpleString(task.text.c_str());
 
 	PyObject* output =

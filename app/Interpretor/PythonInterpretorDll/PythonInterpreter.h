@@ -32,6 +32,8 @@ public:
 	void Reset();
 
 private:
+	PyThreadState* state;
+
 	CPythonTaskQueue queue;
 
 	void InitializePython();

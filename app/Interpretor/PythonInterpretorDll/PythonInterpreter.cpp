@@ -15,7 +15,6 @@
 void CPythonInterpretor::InitializePython() {
 	Py_Initialize();
 	PyEval_InitThreads();
-	PyEval_ReleaseLock();
 
 	PyObject* mainModule = PyImport_AddModule(PYTHON_MAIN.c_str());
 	PyRun_SimpleString(CATCHER_CLASS_CODE.c_str());
@@ -24,9 +23,12 @@ void CPythonInterpretor::InitializePython() {
 		PyObject_GetAttrString(mainModule, PYTHON_CATCHER.c_str());
 
 	queue.Reset(catcher);
+
+	state = PyEval_SaveThread();
 }
 
 void CPythonInterpretor::FinalizePython() {
+	PyEval_RestoreThread(state);
 	Py_Finalize();
 }
 
