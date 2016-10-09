@@ -179,8 +179,8 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 		std::wstring_convert<convert_type, wchar_t> converter;
 		std::string stringCommand = converter.to_bytes(command);
 
-		std::shared_ptr<SimplePythonCallback> callback = 
-			std::shared_ptr<SimplePythonCallback>(&SimplePythonCallback(hwndShow));
+		std::shared_ptr<IReturnResultCallback> callback = 
+			std::make_shared<SimplePythonCallback>(SimplePythonCallback(hwndShow));
 
 		pythonInterpretor.Run(stringCommand, callback);
 		return;

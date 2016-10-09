@@ -66,7 +66,9 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 		return;
 	} else {
 		queue.pop();
-		std::async(&CPythonTaskQueue::Run, this, queue.front());
+		if (!queue.empty()) {
+			std::async(&CPythonTaskQueue::Run, this, queue.front());
+		}
 	}
 }
 
