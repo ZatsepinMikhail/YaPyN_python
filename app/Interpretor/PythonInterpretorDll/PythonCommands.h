@@ -6,15 +6,15 @@
 * Catcher code
 **/
 const std::string CATCHER_CLASS_CODE =
-"import sys\
-class StdoutCatcher :\
-	def __init__(self) :\
-		self.data = ''\
-	def write(self, stuff) :\
-		self.data = self.data + stuff\
-\
-catcher = StdoutCatcher()\
-sys.stdout = catcher";
+"import sys\n\
+class StdoutCatcher :\n\
+	def __init__(self) :\n\
+		self.data = ''\n\
+	def write(self, stuff) :\n\
+		self.data = self.data + stuff\n\
+\n\
+catcher = StdoutCatcher()\n\
+sys.stdout = catcher\n";
 
 /**
 * Flush catcher output
