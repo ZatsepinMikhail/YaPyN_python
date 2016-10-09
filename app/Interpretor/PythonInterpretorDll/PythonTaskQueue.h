@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Python.h" // should be the first include
+#include <Python.h> // should be the first include
 
 #include <exception>
 #include <memory>
