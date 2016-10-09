@@ -14,6 +14,9 @@
 
 void CPythonInterpretor::InitializePython() {
 	Py_Initialize();
+	PyEval_InitThreads();
+	PyEval_ReleaseLock();
+
 	PyObject* mainModule = PyImport_AddModule(PYTHON_MAIN.c_str());
 	PyRun_SimpleString(CATCHER_CLASS_CODE.c_str());
 

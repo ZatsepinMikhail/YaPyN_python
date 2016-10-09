@@ -42,6 +42,9 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 		return;
 	}
 
+	PyGILState_STATE gstate;
+	gstate = PyGILState_Ensure();
+
 	PyRun_SimpleString(task.text.c_str());
 
 	PyObject* output =
@@ -49,6 +52,8 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 
 	std::string stringOutput = GetOutputFromPyObject(output);
 	task.callback->ReturnResult(stringOutput);
+
+	PyGILState_Release(gstate);
 
 	std::lock_guard<std::mutex> lock(queueMutex);
 	queue.pop();
