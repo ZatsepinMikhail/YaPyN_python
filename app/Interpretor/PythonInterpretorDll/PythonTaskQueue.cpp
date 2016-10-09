@@ -34,7 +34,7 @@ void CPythonTaskQueue::Reset(std::unique_ptr<PyObject>& newCatcher) {
 	std::lock_guard<std::mutex> lock(queueMutex);
 	
 	Py_XDECREF(catcher.get());
-	catcher = std::move(catcher);
+	catcher = std::move(newCatcher);
 
 	++queueId;
 
