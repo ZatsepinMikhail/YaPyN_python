@@ -17,12 +17,16 @@ void CPythonInterpretor::InitializePython() {
 	PyEval_InitThreads();
 
 	PyObject* mainModule = PyImport_AddModule(PYTHON_MAIN.c_str());
-	PyRun_SimpleString(CATCHER_CLASS_CODE.c_str());
+	PyRun_SimpleString(CATCHER_OUT_CLASS_CODE.c_str());
+	PyRun_SimpleString(CATCHER_ERR_CLASS_CODE.c_str());
 
-	PyObject* catcher =
-		PyObject_GetAttrString(mainModule, PYTHON_CATCHER.c_str());
+	PyObject* catcherOut =
+		PyObject_GetAttrString(mainModule, PYTHON_CATCHER_OUT.c_str());
 
-	queue.Reset(catcher);
+	PyObject* catcherErr =
+		PyObject_GetAttrString(mainModule, PYTHON_CATCHER_ERR.c_str());
+
+	queue.Reset(catcherOut, catcherErr);
 
 	state = PyEval_SaveThread();
 }

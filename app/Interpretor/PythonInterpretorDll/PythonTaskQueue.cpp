@@ -25,10 +25,11 @@ void CPythonTaskQueue::AddNewTask(
 	}
 }
 
-void CPythonTaskQueue::Reset(PyObject* newCatcher) {
+void CPythonTaskQueue::Reset(PyObject* newCatcherOut, PyObject* newCatcherErr) {
 	std::lock_guard<std::mutex> lock(queueMutex);
 	
-	catcher = newCatcher;
+	catcherOut = newCatcherOut;
+	catcherErr = newCatcherErr;
 
 	++queueId;
 
@@ -50,9 +51,12 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 	PyRun_SimpleString(task.text.c_str());
 
 	PyObject* output =
-		PyObject_GetAttrString(catcher, PYTHON_CATCHER_DATA.c_str());
+		PyObject_GetAttrString(catcherOut, PYTHON_CATCHER_DATA.c_str());
+	PyObject* errors =
+		PyObject_GetAttrString(catcherErr, PYTHON_CATCHER_DATA.c_str());
 
 	std::string stringOutput = GetOutputFromPyObject(output);
+	std::string stringErrors = GetOutputFromPyObject(errors);
 
 	PyGILState_Release(gstate);
 
@@ -61,7 +65,7 @@ void CPythonTaskQueue::Run(const CPythonTask& task) {
 		return;
 	}
 
-	task.callback->ReturnResult(stringOutput);
+	task.callback->ReturnResult(stringOutput, stringErrors);
 
 	std::lock_guard<std::mutex> lock(queueMutex);
 	if (queue.empty()) {

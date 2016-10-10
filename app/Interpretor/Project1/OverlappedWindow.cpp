@@ -186,7 +186,7 @@ void COverlappedWindow::OnCommand(WPARAM wParam, LPARAM lParam) {
 		return;
 	}
 	default:
-		//jsut relax;
+		//just relax;
 		return;
 	}
 }

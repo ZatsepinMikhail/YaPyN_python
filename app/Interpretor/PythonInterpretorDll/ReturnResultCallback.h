@@ -7,5 +7,5 @@ class IReturnResultCallback
 public:
 	virtual ~IReturnResultCallback() {};
 
-	virtual void ReturnResult(const std::string&) = 0;
+	virtual void ReturnResult(const std::string&, const std::string&) = 0;
 };

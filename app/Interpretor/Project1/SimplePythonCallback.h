@@ -9,7 +9,7 @@ class SimplePythonCallback : public IReturnResultCallback {
 public:
 	SimplePythonCallback(HWND hwndShow);
 
-	void ReturnResult(const std::string& result);
+	void ReturnResult(const std::string& resultOutput, const std::string& resultErrors);
 
 	~SimplePythonCallback();
 private:
