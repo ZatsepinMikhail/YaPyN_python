@@ -14,7 +14,8 @@ class StdoutCatcher :\n\
 		self.data = self.data + stuff\n\
 \n\
 catcher = StdoutCatcher()\n\
-sys.stdout = catcher\n";
+sys.stdout = catcher\n\
+sys.stderr = catcher\n";
 
 /**
 * Flush catcher output
